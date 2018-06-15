@@ -1,6 +1,8 @@
 package ru.ay.exlinker;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ay.example.controller.BookController;
 
 import java.io.PrintWriter;
@@ -13,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ExlinkerTest {
 
+    private Logger logger = LoggerFactory.getLogger(ExlinkerTest.class);
+
     @Test
     public void shouldLink() {
         String template = "https://github.com/AlexanderYastrebov/exlinker/blob/{rev}/src/test/java/{packagePath}/{fileName}#L{lineNumber}";
@@ -22,13 +26,13 @@ public class ExlinkerTest {
         try {
             new BookController().alpha();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.debug("original", ex);
 
             exlinker.link(ex);
 
-            ex.printStackTrace();
+            logger.debug("linked", ex);
 
-            String stackTrace = printStackTrace(ex, 10);
+            String stackTrace = stackTraceToString(ex, 10);
 
             assertEquals(stackTrace, "java.lang.RuntimeException: Omega server not available\n" +
                     "\tat ru.ay.example.dao.BookDao.iota(BookDao.java:14)\n" +
@@ -43,7 +47,7 @@ public class ExlinkerTest {
         }
     }
 
-    private String printStackTrace(Exception ex, int limit) {
+    private String stackTraceToString(Exception ex, int limit) {
         StringWriter w = new StringWriter();
 
         ex.printStackTrace(new PrintWriter(w));
