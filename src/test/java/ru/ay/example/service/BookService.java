@@ -7,7 +7,7 @@ public class BookService {
     private final BookDao bookDao = new BookDao();
 
     public void delta() {
-        epsilon();
+        new Task().run();
     }
 
     private void epsilon() {
@@ -16,5 +16,12 @@ public class BookService {
 
     private void zeta() {
         bookDao.eta();
+    }
+
+    private class Task {
+
+        void run() {
+            epsilon();
+        }
     }
 }

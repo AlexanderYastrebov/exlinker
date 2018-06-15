@@ -32,18 +32,20 @@ public class ExlinkerTest {
 
             ex.printStackTrace();
 
-            String stackTrace = stackTraceToString(ex, 10);
+            String stackTrace = stackTraceToString(ex, 12);
 
-            assertEquals(stackTrace, "java.lang.RuntimeException: Omega server not available\n" +
+            assertEquals("java.lang.RuntimeException: Omega server not available\n" +
                     "\tat ru.ay.example.dao.BookDao.iota(BookDao.java:14)\n" +
                     "\tat ru.ay.example.dao.BookDao.theta(BookDao.java:10)\n" +
                     "\tat ru.ay.example.dao.BookDao.eta(BookDao.java:6)\n" +
                     "\tat ru.ay.example.service.BookService.zeta(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L18)\n" +
                     "\tat ru.ay.example.service.BookService.epsilon(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L14)\n" +
+                    "\tat ru.ay.example.service.BookService.access$100(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L5)\n" +
+                    "\tat ru.ay.example.service.BookService$Task.run(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L24)\n" +
                     "\tat ru.ay.example.service.BookService.delta(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L10)\n" +
                     "\tat ru.ay.example.controller.BookController.gamma(BookController.java:18)\n" +
                     "\tat ru.ay.example.controller.BookController.beta(BookController.java:14)\n" +
-                    "\tat ru.ay.example.controller.BookController.alpha(BookController.java:10)");
+                    "\tat ru.ay.example.controller.BookController.alpha(BookController.java:10)", stackTrace);
         }
     }
 
