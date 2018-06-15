@@ -26,11 +26,11 @@ public class ExlinkerTest {
         try {
             new BookController().alpha();
         } catch (Exception ex) {
-            logger.debug("original", ex);
+            ex.printStackTrace();
 
             exlinker.link(ex);
 
-            logger.debug("linked", ex);
+            ex.printStackTrace();
 
             String stackTrace = stackTraceToString(ex, 10);
 
@@ -44,6 +44,15 @@ public class ExlinkerTest {
                     "\tat ru.ay.example.controller.BookController.gamma(BookController.java:18)\n" +
                     "\tat ru.ay.example.controller.BookController.beta(BookController.java:14)\n" +
                     "\tat ru.ay.example.controller.BookController.alpha(BookController.java:10)");
+        }
+    }
+
+    @Test
+    public void shouldLogLinked() {
+        try {
+            new BookController().alpha();
+        } catch (Exception ex) {
+            logger.debug("debugging", ex);
         }
     }
 

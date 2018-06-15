@@ -2,6 +2,11 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
+    <throwableRenderer class="ru.ay.exlinker.log4j12.LinkedThrowableRenderer">
+        <param name="template" value="https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/{packagePath}/{fileName}#L{lineNumber}"/>
+        <param name="pattern" value="ru.ay.example.service.*|ru.ay.example.dao.*"/>
+    </throwableRenderer>
+
     <appender name="default" class="org.apache.log4j.ConsoleAppender">
         <param name="encoding" value="UTF-8"/>
         <layout class="org.apache.log4j.PatternLayout">
