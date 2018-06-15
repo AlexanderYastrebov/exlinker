@@ -16,11 +16,6 @@ public class LinkedThrowableRenderer implements ThrowableRenderer, OptionHandler
     private Predicate<String> matcher;
     private Exlinker exlinker;
 
-    @Override
-    public String[] doRender(Throwable throwable) {
-        return delegate.doRender(exlinker.link(throwable));
-    }
-
     public void setTemplate(String template) {
         this.template = template;
     }
@@ -32,5 +27,10 @@ public class LinkedThrowableRenderer implements ThrowableRenderer, OptionHandler
     @Override
     public void activateOptions() {
         exlinker = new Exlinker(matcher, template);
+    }
+
+    @Override
+    public String[] doRender(Throwable throwable) {
+        return delegate.doRender(exlinker.link(throwable));
     }
 }

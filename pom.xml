@@ -12,6 +12,7 @@
 
     <modules>
         <module>exlinker-core</module>
+        <module>exlinker-log4j12</module>
     </modules>
 
     <build>

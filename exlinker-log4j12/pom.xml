@@ -11,12 +11,25 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>exlinker-core</artifactId>
+    <artifactId>exlinker-log4j12</artifactId>
 
     <dependencies>
         <dependency>
+            <groupId>ru.ay</groupId>
+            <artifactId>exlinker-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

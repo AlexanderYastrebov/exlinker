@@ -1,8 +1,6 @@
 package ru.ay.exlinker;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.ay.example.controller.BookController;
 
 import java.util.function.Predicate;
@@ -11,8 +9,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ExlinkerTest {
-
-    private Logger logger = LoggerFactory.getLogger(ExlinkerTest.class);
 
     private Predicate<String> matcher = name -> name.startsWith("ru.ay.example.service");
     private String template = "https://github.com/AlexanderYastrebov/exlinker/blob/{rev}/src/test/java/{packagePath}/{fileName}#L{lineNumber}";
@@ -56,16 +52,6 @@ public class ExlinkerTest {
             StackTraceElement[] second = ex.getStackTrace();
 
             assertArrayEquals(first, second);
-        }
-    }
-
-    @Test
-    public void shouldLogLinked() {
-        try {
-            new BookController().alpha();
-        } catch (Exception ex) {
-            logger.debug("once", ex);
-            logger.debug("twice", ex);
         }
     }
 }
