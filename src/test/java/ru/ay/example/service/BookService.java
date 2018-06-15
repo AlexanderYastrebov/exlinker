@@ -15,7 +15,11 @@ public class BookService {
     }
 
     private void zeta() {
-        bookDao.eta();
+        try {
+            bookDao.eta();
+        } catch (Exception ex) {
+            throw new RuntimeException("Zeta failed", ex);
+        }
     }
 
     private class Task {

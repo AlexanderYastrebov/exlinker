@@ -20,6 +20,11 @@ public class Exlinker {
             stackTrace[i] = new SteLinker(stackTrace[i]).getLinked();
         }
         throwable.setStackTrace(stackTrace);
+
+        Throwable cause = throwable.getCause();
+        if (cause != null) {
+            link(cause);
+        }
         return throwable;
     }
 

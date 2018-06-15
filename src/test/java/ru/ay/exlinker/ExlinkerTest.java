@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ExlinkerTest {
 
@@ -32,20 +32,16 @@ public class ExlinkerTest {
 
             ex.printStackTrace();
 
-            String stackTrace = stackTraceToString(ex, 12);
-
-            assertEquals("java.lang.RuntimeException: Omega server not available\n" +
-                    "\tat ru.ay.example.dao.BookDao.iota(BookDao.java:14)\n" +
-                    "\tat ru.ay.example.dao.BookDao.theta(BookDao.java:10)\n" +
-                    "\tat ru.ay.example.dao.BookDao.eta(BookDao.java:6)\n" +
-                    "\tat ru.ay.example.service.BookService.zeta(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L18)\n" +
-                    "\tat ru.ay.example.service.BookService.epsilon(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L14)\n" +
-                    "\tat ru.ay.example.service.BookService.access$100(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L5)\n" +
-                    "\tat ru.ay.example.service.BookService$Task.run(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L24)\n" +
-                    "\tat ru.ay.example.service.BookService.delta(https://github.com/AlexanderYastrebov/exlinker/blob/master/src/test/java/ru/ay/example/service/BookService.java#L10)\n" +
-                    "\tat ru.ay.example.controller.BookController.gamma(BookController.java:18)\n" +
-                    "\tat ru.ay.example.controller.BookController.beta(BookController.java:14)\n" +
-                    "\tat ru.ay.example.controller.BookController.alpha(BookController.java:10)", stackTrace);
+            Throwable t = ex;
+            while (t != null) {
+                for (StackTraceElement ste : t.getStackTrace()) {
+                    if (matcher.test(ste.getClassName())) {
+                        assertTrue(ste.getFileName().startsWith("https://github.com/AlexanderYastrebov/exlinker/blob/master" +
+                                "/src/test/java/ru/ay/example/service/BookService.java#L"));
+                    }
+                }
+                t = t.getCause();
+            }
         }
     }
 
