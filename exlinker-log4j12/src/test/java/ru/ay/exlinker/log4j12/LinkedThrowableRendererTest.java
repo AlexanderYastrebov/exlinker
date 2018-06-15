@@ -10,9 +10,21 @@ public class LinkedThrowableRendererTest {
     @Test
     public void shouldLog() {
         try {
-            throw new RuntimeException("Hello");
+            doSomething();
         } catch (Exception ex) {
-            logger.error("oops", ex);
+            logger.error("Error occured", ex);
         }
+    }
+
+    private void doSomething() {
+        try {
+            doSomethingElse();
+        } catch (Exception ex) {
+            throw new RuntimeException("Wrapping", ex);
+        }
+    }
+
+    private void doSomethingElse() {
+        throw new RuntimeException("Oops");
     }
 }
