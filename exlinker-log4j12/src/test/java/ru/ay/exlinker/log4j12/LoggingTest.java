@@ -3,9 +3,9 @@ package ru.ay.exlinker.log4j12;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class LinkedThrowableRendererTest {
+public class LoggingTest {
 
-    private Logger logger = Logger.getLogger(LinkedThrowableRendererTest.class);
+    private Logger logger = Logger.getLogger(LoggingTest.class);
 
     @Test
     public void shouldLog() {
