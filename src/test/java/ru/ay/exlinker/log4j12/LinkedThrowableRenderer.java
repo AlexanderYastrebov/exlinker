@@ -1,15 +1,16 @@
 package ru.ay.exlinker.log4j12;
 
-import org.apache.log4j.EnhancedThrowableRenderer;
+import org.apache.log4j.DefaultThrowableRenderer;
+import org.apache.log4j.spi.OptionHandler;
 import org.apache.log4j.spi.ThrowableRenderer;
 import ru.ay.exlinker.Exlinker;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public class LinkedThrowableRenderer implements ThrowableRenderer {
+public class LinkedThrowableRenderer implements ThrowableRenderer, OptionHandler {
 
-    private EnhancedThrowableRenderer delegate = new EnhancedThrowableRenderer();
+    private ThrowableRenderer delegate = new DefaultThrowableRenderer();
 
     private String template;
     private Predicate<String> matcher;
@@ -22,20 +23,14 @@ public class LinkedThrowableRenderer implements ThrowableRenderer {
 
     public void setTemplate(String template) {
         this.template = template;
-
-        initExlinker();
     }
 
     public void setPattern(String pattern) {
         this.matcher = Pattern.compile(pattern).asPredicate();
-
-        initExlinker();
     }
 
-    private void initExlinker() {
-        if (template == null || matcher == null) {
-            return;
-        }
+    @Override
+    public void activateOptions() {
         exlinker = new Exlinker(matcher, template);
     }
 }
