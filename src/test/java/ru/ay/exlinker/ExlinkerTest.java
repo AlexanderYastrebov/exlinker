@@ -5,30 +5,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ay.example.controller.BookController;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ExlinkerTest {
 
     private Logger logger = LoggerFactory.getLogger(ExlinkerTest.class);
 
+    private Predicate<String> matcher = name -> name.startsWith("ru.ay.example.service");
+    private String template = "https://github.com/AlexanderYastrebov/exlinker/blob/{rev}/src/test/java/{packagePath}/{fileName}#L{lineNumber}";
+    private Exlinker unit = new Exlinker(matcher, template, "rev", "master");
+
     @Test
     public void shouldLink() {
-        String template = "https://github.com/AlexanderYastrebov/exlinker/blob/{rev}/src/test/java/{packagePath}/{fileName}#L{lineNumber}";
-        Predicate<String> matcher = name -> name.startsWith("ru.ay.example.service");
-        Exlinker exlinker = new Exlinker(matcher, template, "rev", "master");
-
         try {
             new BookController().alpha();
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            exlinker.link(ex);
+            unit.link(ex);
 
             ex.printStackTrace();
 
@@ -36,7 +33,7 @@ public class ExlinkerTest {
             while (t != null) {
                 for (StackTraceElement ste : t.getStackTrace()) {
                     if (matcher.test(ste.getClassName())) {
-                        assertTrue(ste.getFileName().startsWith("https://github.com/AlexanderYastrebov/exlinker/blob/master" +
+                        assertTrue(ste.getFileName().startsWith("'https://github.com/AlexanderYastrebov/exlinker/blob/master" +
                                 "/src/test/java/ru/ay/example/service/BookService.java#L"));
                     }
                 }
@@ -46,25 +43,29 @@ public class ExlinkerTest {
     }
 
     @Test
+    public void shouldNotLinkTwice() {
+        try {
+            new BookController().alpha();
+        } catch (Exception ex) {
+            unit.link(ex);
+
+            StackTraceElement[] first = ex.getStackTrace();
+
+            unit.link(ex);
+
+            StackTraceElement[] second = ex.getStackTrace();
+
+            assertArrayEquals(first, second);
+        }
+    }
+
+    @Test
     public void shouldLogLinked() {
         try {
             new BookController().alpha();
         } catch (Exception ex) {
-            logger.debug("debugging", ex);
+            logger.debug("once", ex);
+            logger.debug("twice", ex);
         }
-    }
-
-    private String stackTraceToString(Exception ex, int limit) {
-        StringWriter w = new StringWriter();
-
-        ex.printStackTrace(new PrintWriter(w));
-
-        return head(w.toString(), limit);
-    }
-
-    private String head(String s, int limit) {
-        return Stream.of(s.split("\n"))
-                .limit(limit)
-                .collect(Collectors.joining("\n"));
     }
 }

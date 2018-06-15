@@ -38,6 +38,8 @@ public class Exlinker {
         return template;
     }
 
+    private static String LINKED_MARKER = "'";
+
     private class SteLinker {
 
         private final StackTraceElement ste;
@@ -47,7 +49,14 @@ public class Exlinker {
         }
 
         StackTraceElement getLinked() {
-            return classNameMatcher.test(ste.getClassName()) ? makeLinked() : ste;
+            if (isAlreadyLinked(ste.getFileName()) || !classNameMatcher.test(ste.getClassName())) {
+                return ste;
+            }
+            return makeLinked();
+        }
+
+        private boolean isAlreadyLinked(String className) {
+            return className.startsWith(LINKED_MARKER);
         }
 
         private StackTraceElement makeLinked() {
@@ -71,7 +80,7 @@ public class Exlinker {
             if (fileName != null) {
                 result = result.replace("{fileName}", fileName);
             }
-            return result;
+            return LINKED_MARKER + result + LINKED_MARKER;
         }
     }
 }
